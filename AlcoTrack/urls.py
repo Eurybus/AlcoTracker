@@ -31,7 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^login/$|^accounts/login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^home/$', bviews.home, name='home'),
     url(r'^registration/$', keystone_views.signup, name='registration'),

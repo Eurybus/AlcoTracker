@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -23,7 +24,7 @@ def signup(request):
     else:
         user_form = SignupForm()
         return render(request, 'Keystone/signup.html', {
-            'user_form': user_form })
+            'user_form': user_form})
 
 
 def index(request):
@@ -31,5 +32,6 @@ def index(request):
     return HttpResponse(template.render())
 
 
+@login_required()
 def settings(request):
     return HttpResponse("WIP")
