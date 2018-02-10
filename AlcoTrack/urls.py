@@ -14,19 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers
 from rest import views as rviews
 from BeerTracker import views as bviews
+from Keystone import  views as keystone_views
 
 router = routers.DefaultRouter()
 router.register(r'users', rviews.UserViewSet)
 router.register(r'groups', rviews.GroupViewSet)
 
 urlpatterns = [
-    path('', bviews.index, name='index'),
+    path('', keystone_views.index, name='index'),
     path('admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^home/$', bviews.home, name='home'),
+    url(r'^registration/$', keystone_views.signup, name='registration'),
+    url(r'^settings/$', keystone_views.settings, name='settings'),
+
 ]

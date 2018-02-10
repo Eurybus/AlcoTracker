@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.timezone import now
 
 
@@ -33,12 +35,10 @@ class Patron(models.Model):
     current_event = models.ForeignKey(Event, null=True, blank=True,
                                       related_name="patrons",
                                       on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=12)
-    last_name = models.CharField(max_length=16)
 
     @property
     def full_name(self):
-        return "{} {}".format(self.first_name, self.last_name)
+        return "{} {}".format(self.user.first_name, self.user.last_name)
 
     def __str__(self):
         return self.full_name
@@ -50,7 +50,8 @@ class DrinkType(models.Model):
         (0, 'Alcohol free'),
         (1, 'Soft alcholic drink'),
         (2, 'Liquor'),
-        (3, 'Hard liquor')
+        (3, 'Hard liquor'),
+        (4, 'Mixed drink'),
 
     }
     name = models.CharField(max_length=24, unique=True)
@@ -72,8 +73,8 @@ class Drink(models.Model):
     liquid_amount = models.IntegerField('Amount of liquid (ml)')
 
     def __str__(self):
-        return "{} ({}): {}% {}".format(
-            self.name, self.type, self.alcohol_amount, self.liquid_amount)
+        return "{}: {}% {}ml".format(
+            self.name, self.alcohol_amount, self.liquid_amount)
 
 
 class AlcoholConsumptionEvent(models.Model):
@@ -83,7 +84,22 @@ class AlcoholConsumptionEvent(models.Model):
     drinker = models.ForeignKey(Patron, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=now)
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "{} drank {} at {}".format(
-            self.drinker, self.drink.name, self.timestamp.time())
+        return "{} drank {} on {} at {}".format(
+            self.drinker, self.drink.name, self.timestamp.time(),
+            self.event.name)
+
+# Signal listeners
+
+
+@receiver(post_save, sender=User)
+def create_user_patron(sender, instance, created, **kwargs):
+    if created:
+        Patron.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_patron(sender, instance, **kwargs):
+    instance.patron.save()

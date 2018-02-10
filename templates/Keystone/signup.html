@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block navbar-home %}
+    <li class="active"><a href="#">Home</a></li>
+{% endblock %}
+{% block content %}
+    <div class="col-xs-12">
+        <h2>Registration</h2>
+        <form method="post">
+          {% csrf_token %}
+          {{ user_form.as_p }}
+          <button type="submit">Sign up!</button>
+        </form>
+    </div>
+
+{% endblock %}
