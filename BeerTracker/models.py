@@ -40,6 +40,10 @@ class Patron(models.Model):
     def full_name(self):
         return "{} {}".format(self.user.first_name, self.user.last_name)
 
+    @property
+    def username(self):
+        return self.user.username
+
     def __str__(self):
         return self.full_name
 
@@ -81,7 +85,8 @@ class AlcoholConsumptionEvent(models.Model):
     """
     This model is used to keep track of each persons' consumed alcohol
     """
-    drinker = models.ForeignKey(Patron, on_delete=models.CASCADE)
+    drinker = models.ForeignKey(Patron, on_delete=models.CASCADE,
+                                related_name='consumptions')
     timestamp = models.DateTimeField(default=now)
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -91,15 +96,31 @@ class AlcoholConsumptionEvent(models.Model):
             self.drinker, self.drink.name, self.timestamp.time(),
             self.event.name)
 
+
+class LiveSetting(models.Model):
+    """
+    Used to store settings which are not hardcoded
+    """
+
+    current_default_event = models.ForeignKey(
+        Event,
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        help_text='Sets current event to new accounts')
+
+
 # Signal listeners
-
-
 @receiver(post_save, sender=User)
 def create_user_patron(sender, instance, created, **kwargs):
     if created:
         Patron.objects.create(user=instance)
+        if LiveSetting.objects.first() is not None:
+            instance.patron.current_event = \
+                LiveSetting.objects.first().current_default_event
 
 
 @receiver(post_save, sender=User)
 def save_user_patron(sender, instance, **kwargs):
-    instance.patron.save()
+    if instance.username != 'admin':
+        instance.patron.save()

@@ -18,7 +18,7 @@
 <body>
     <header>
         {% load static %}
-        <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand">AlcoTracker</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -32,7 +32,10 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}#">Logout</a></li>
                       {% endblock %}
                       </ul>
-                      <span class="navbar-text text-dark navbar-right">{{ user.username }}</span>
+                      <span class="navbar-text navbar-right">Logged in as {{ user.username }}</span>
+                      <span class="navbar-text navbar-right" style="padding-left: 1ex; margin-left: 1ex; border-left: double 1px black">
+                          Current event: {{ user.patron.current_event.name }}
+                      </span>
                   {% else %}
                     <ul class="nav navbar-nav navbar-right">
                         {% block navbar-login %}<li class="nav-item"><a class="nav-link" href="{% url 'login' %}#">Login</a></li>{% endblock %}
@@ -41,7 +44,7 @@
             </div>
         </nav>
     </header>
-    <main class="container" role="main">
+    <main class="container" role="main" style="margin-top: 2ex">
         {% block content %}
         {% endblock %}
     </main>

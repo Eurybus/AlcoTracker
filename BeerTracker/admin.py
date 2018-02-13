@@ -6,7 +6,8 @@ from .models import (Venue,
                      DrinkType,
                      Event,
                      AlcoholConsumptionEvent,
-                     Patron)
+                     Patron,
+                     LiveSetting)
 
 
 @register(Venue)
@@ -18,7 +19,13 @@ class VenueAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'venue', 'party_date']
 
+
+@register(Patron)
+class PatronAdmin(admin.ModelAdmin):
+    list_display = ['username', 'full_name']
+
+
 admin.site.register(DrinkType)
 admin.site.register(Drink)
 admin.site.register(AlcoholConsumptionEvent)
-admin.site.register(Patron)
+admin.site.register(LiveSetting)

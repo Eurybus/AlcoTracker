@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers
@@ -29,6 +30,8 @@ router.register(r'groups', rviews.GroupViewSet)
 urlpatterns = [
     path('', keystone_views.index, name='index'),
     path('admin/', admin.site.urls),
+    path('logalco/', login_required(bviews.InputDrinkEvent.as_view()),
+         name='log-drink'),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^login/$|^accounts/login/$', auth_views.login, name='login'),
@@ -36,5 +39,6 @@ urlpatterns = [
     url(r'^home/$', bviews.home, name='home'),
     url(r'^registration/$', keystone_views.signup, name='registration'),
     url(r'^settings/$', keystone_views.settings, name='settings'),
+
 
 ]
