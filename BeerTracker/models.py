@@ -17,14 +17,37 @@ class Event(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     party_date = models.DateTimeField('Date of the party')
     party_end = models.DateTimeField('Date of the party termination')
+    description = models.TextField(null=True)
 
     def __str__(self):
         return "{} at {} starting from {}".format(
             self.name, self.venue, self.party_date)
 
     @property
+    def is_ongoing(self):
+        current_time = now()
+        return True if current_time.time() < self.party_end.time() else False
+
+    @property
     def current_patrons(self):
         return self.patrons.all()
+
+    @property
+    def drink_events(self):
+        return (
+            AlcoholConsumptionEvent.objects.
+                filter(event_id=self.pk).order_by('timestamp').reverse()
+        )
+
+    @property
+    def drink_events_hard(self):
+        return self.drink_events.filter(
+            drink__type__drink_class__in=[3, 4, 5])
+
+    @property
+    def drink_events_soft(self):
+        return self.drink_events.filter(
+            drink__type__drink_class__in=[1, 2])
 
 
 class Patron(models.Model):
@@ -95,6 +118,10 @@ class AlcoholConsumptionEvent(models.Model):
         return "{} drank {} on {} at {}".format(
             self.drinker, self.drink.name, self.timestamp.time(),
             self.event.name)
+
+    @property
+    def drinker_name(self):
+        return self.drinker.user.first_name
 
 
 class LiveSetting(models.Model):

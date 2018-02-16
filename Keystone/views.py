@@ -20,7 +20,7 @@ def signup(request):
                 password=user_form.cleaned_data.get('password1')
             )
             login(request, user)
-            return redirect('')
+            return redirect('home')
     else:
         user_form = SignupForm()
         return render(request, 'Keystone/signup.html', {

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="jumbotron">
+            <h1 class="text-center">{{ event.name }}</h1>
+            <p>{{ event.description }}</p>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h3>Participants</h3>
+            <table class="table table-striped table-light">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount of drinks</th>
+                </tr>
+            </thead>
+            {% for patron in event.patrons.all %}
+            <tr>
+                <td>{{ patron.user.first_name }}</td>
+                <td>{{ patron.consumptions.count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+        <div class="col-md-8">
+            <h3>Drinking statistics</h3>
+            <div class="row">
+                <div class="col-md">
+                <h4>Soft drinks</h4>
+                <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th>Drinker</th>
+                        <th>Drink</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                {% for consumption in event.drink_events_soft %}
+                <tr>
+                    <td>{{ consumption.drinker_name }}</td>
+                    <td>{{ consumption.drink }}</td>
+                    <td>{{ consumption.timestamp.time }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+            <div class="col-md">
+                <h4>Hard drinks</h4>
+                <table class="table table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th>Drinker</th>
+                            <th>Drink</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    {% for consumption in event.drink_events_hard %}
+                <tr>
+                    <td>{{ consumption.drinker_name }}</td>
+                    <td>{{ consumption.drink }}</td>
+                    <td>{{ consumption.timestamp.time }}</td>
+                </tr>
+                {% endfor %}
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

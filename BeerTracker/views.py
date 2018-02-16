@@ -5,9 +5,9 @@ from django.shortcuts import render
 # Create your views here.
 from django.template import loader
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView, DetailView, ListView
 
-from BeerTracker.models import AlcoholConsumptionEvent
+from BeerTracker.models import AlcoholConsumptionEvent, Event
 
 
 class AjaxableResponseMixin:
@@ -36,18 +36,24 @@ class AjaxableResponseMixin:
             return response
 
 
-@login_required()
-def home(request):
-    template = loader.get_template('../templates/BeerTracker/home.html')
-    return HttpResponse(template.render())
+class HomeView(TemplateView):
+    template_name = '../templates/BeerTracker/home.html'
 
 
-@login_required()
-class EventView(View):
-    def get(self, request):
-        template = loader.get_template(
-            '../templates/BeerTracker/beerInput.html')
-        return HttpResponse(template.render())
+class EventListView(ListView):
+    model = Event
+    template_name = "../templates/BeerTracker/event-list.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return super().get_context_data(object_list=object_list, **kwargs)
+
+
+class EventDetailView(DetailView):
+    template_name = "../templates/BeerTracker/event-detail.html"
+    model = Event
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
 
 
 class InputDrinkEvent(AjaxableResponseMixin, CreateView):

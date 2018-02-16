@@ -28,15 +28,19 @@ router.register(r'users', rviews.UserViewSet)
 router.register(r'groups', rviews.GroupViewSet)
 
 urlpatterns = [
-    path('', keystone_views.index, name='index'),
+    path('', bviews.HomeView.as_view(), name='index'),
     path('admin/', admin.site.urls),
     path('logalco/', login_required(bviews.InputDrinkEvent.as_view()),
          name='log-drink'),
+    path('events/', login_required(bviews.EventListView.as_view()),
+         name='event-list'),
+    path('events/<int:pk>', login_required(bviews.EventDetailView.as_view()),
+         name='event-detail'),
+    path('home/', bviews.HomeView.as_view(), name='home'),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^login/$|^accounts/login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
-    url(r'^home/$', bviews.home, name='home'),
     url(r'^registration/$', keystone_views.signup, name='registration'),
     url(r'^settings/$', keystone_views.settings, name='settings'),
 
