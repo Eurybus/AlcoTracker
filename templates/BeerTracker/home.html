@@ -3,15 +3,18 @@
     <li class="active nav-link">Home</li>
 {% endblock %}
 {% block content %}
+    {% if user.is_authenticated %}
     <div class="col-xs">
-        <h2>Homepage</h2>
-        <p>hello {{ user.first_name }}</p>
+        <p>Nothing to see here</p>
     </div>
-    <div class="col-xs">
-        <p>left col</p>
-    </div>
-    <div class="col-xs">
-        <p>right col</p>
-    </div>
+    {% else %}
+        <div class="col-xs">
+            <h2>Please log in or register</h2>
+            <ul>
+                <li><a href="registration">Register</a> </li>
+                <li><a href="login">Login</a></li>
+            </ul>
+        </div>
+    {% endif %}
 
 {% endblock %}

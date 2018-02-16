@@ -3,10 +3,18 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-  </form>
+{% block navbar-master %} {% endblock %}
+{% load bootstrap %}
+
+  <div class="row">
+    <div class="col-lg text-center">
+        <h1>AlcoTrack</h1>
+        <h2>Login</h2>
+      <form method="post" class="form-signin">
+        {% csrf_token %}
+        {{ form | bootstrap }}
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}

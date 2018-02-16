@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'BeerTracker.apps.BeertrackerConfig',
     'rest_framework',
+    'bootstrapform',
 ]
 
 MIDDLEWARE = [
