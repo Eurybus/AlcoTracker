@@ -125,3 +125,5 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, '/static')
 STATICFILES_DIRS = ['static']
 LOGIN_REDIRECT_URL = 'home'
+
+from secret_conf import *
