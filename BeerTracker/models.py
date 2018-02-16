@@ -50,15 +50,14 @@ class Patron(models.Model):
 
 class DrinkType(models.Model):
 
-    DRINK_CLASSES = {
+    DRINK_CLASSES = (
         (0, 'Alcohol free - ~0%'),
         (1, 'Soft alcholic beverage - <9%'),
         (2, 'Strong alcoholic beverage - 9%-22%'),
         (3, 'Liquor - 20%-50%'),
         (4, 'Strong liquor - >50%'),
         (5, 'Mixed drink - Any ABV'),
-
-    }
+    )
     name = models.CharField(max_length=24, unique=True)
     drink_class = models.IntegerField('Drink class', choices=DRINK_CLASSES)
 
