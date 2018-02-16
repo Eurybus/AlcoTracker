@@ -1,5 +1,6 @@
 decorator==4.2.1
 Django==2.0.2
+django-bootstrap-form==3.3
 djangorestframework==3.7.7
 ipdb==0.10.3
 ipython==6.2.1
