@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load bootstrap %}
+    {% autoescape off %}
+    <form action=".", method="POST">
+        {% endautoescape %}
+        {% csrf_token %}
+        {{ form | bootstrap }}
+        <br>
+        <input type="submit" class="btn btn-primary" value="Submit!">
+    </form>
+{% endblock %}
