@@ -126,6 +126,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = ['static']
 LOGIN_REDIRECT_URL = 'home'
 
+LOGOUT_REDIRECT_URL = '/'
 try:
     from secret_conf import *
 except:

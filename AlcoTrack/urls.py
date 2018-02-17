@@ -42,7 +42,9 @@ urlpatterns = [
     url(r'^login/$|^accounts/login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^registration/$', keystone_views.signup, name='registration'),
-    url(r'^settings/$', keystone_views.settings, name='settings'),
+    url(r'^settings/$',
+        login_required(bviews.PatronModificationView.as_view()),
+        name='settings'),
 
 
 ]

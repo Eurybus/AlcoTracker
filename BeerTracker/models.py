@@ -20,7 +20,7 @@ class Event(models.Model):
     description = models.TextField(null=True)
 
     def __str__(self):
-        return "{} at {} starting from {}".format(
+        return "{} at {}, from {}".format(
             self.name, self.venue, self.party_date)
 
     @property

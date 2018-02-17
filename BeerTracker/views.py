@@ -4,10 +4,13 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.template import loader
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, TemplateView, DetailView, ListView
+from django.views.generic import CreateView, TemplateView, DetailView, \
+    ListView, FormView
 
-from BeerTracker.models import AlcoholConsumptionEvent, Event
+from BeerTracker.forms import PatronModificationForm
+from BeerTracker.models import AlcoholConsumptionEvent, Event, Patron
 
 
 class AjaxableResponseMixin:
@@ -66,3 +69,18 @@ class InputDrinkEvent(AjaxableResponseMixin, CreateView):
         form.instance.drinker = self.request.user.patron
         form.instance.event = self.request.user.patron.current_event
         return super().form_valid(form)
+
+
+class PatronModificationView(FormView):
+    form_class = PatronModificationForm
+    template_name = '../templates/BeerTracker/patron-detail.html'
+    success_url = reverse_lazy('settings')
+
+    def form_valid(self, form):
+        resp = super().form_valid(form)
+        patron = Patron.objects.get(user=self.request.user)
+        patron.current_event = form.instance.current_event
+        patron.save()
+        return resp
+
+
