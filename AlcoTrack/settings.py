@@ -126,4 +126,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = ['static']
 LOGIN_REDIRECT_URL = 'home'
 
-from secret_conf import *
+try:
+    from secret_conf import *
+except:
+    pass

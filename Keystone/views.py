@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.template import loader
+from django.urls import reverse_lazy
 
 from Keystone.forms import SignupForm
 
@@ -19,8 +20,11 @@ def signup(request):
                 username=user_form.cleaned_data.get('username'),
                 password=user_form.cleaned_data.get('password1')
             )
+
             login(request, user)
             return redirect('home')
+        else:
+            return redirect(reverse_lazy('registration'))
     else:
         user_form = SignupForm()
         return render(request, 'Keystone/signup.html', {
